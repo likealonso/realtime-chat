@@ -9,8 +9,14 @@ document.addEventListener("DOMContentLoaded", function() {
   socket.on('clear-circles', function() {
     circles.innerHTML = ''
   });
+  
+  socket.on('update-player-list', function(initials) {
+    var playerList = '<li>' + initials.join('</li><li>') + '</li>';
+    players.innerHTML = playerList;
+  });
 
   var circles = document.getElementById('circles');
+  var players = document.getElementById('players');
   var initials = '';
 
   circles.addEventListener('click', function(evt) {
@@ -32,6 +38,8 @@ document.addEventListener("DOMContentLoaded", function() {
   do {
     initials = getInitials();
   } while (initials.length < 2 || initials.length > 3);
+
+  socket.emit('register-player', initials);
 
   function getInitials() {
     var input = prompt("Please enter your initials");
